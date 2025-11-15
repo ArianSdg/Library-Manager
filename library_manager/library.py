@@ -11,6 +11,7 @@ class Book:
         self.year = year
         self.is_borrowed = is_borrowed
 
+
 class LibraryManager:
     def __init__(self, books_file: str):
         self.books_file = books_file
@@ -22,14 +23,26 @@ class LibraryManager:
         self.save_books()
 
     def delete_book(self, title):
-        self.books = [book for book in self.books if book.title != title]
+        self.books = [book for book in self.books if book.title.lower() != title.lower()]
         self.save_books()
 
     def borrow_book(self, title):
-        return []
+        for book in self.books:
+            if title.lower() == book.title.lower():
+                if book.is_borrowed:
+                    print(f"Book '{book.title}' is already borrowed.")
+                else:
+                    book.is_borrowed = True
+        self.save_books()
 
     def return_book(self, title):
-        return []
+        for book in self.books:
+            if title.lower() == book.title.lower():
+                if book.is_borrowed:
+                    book.is_borrowed = False
+                else:
+                    print(f"Book '{book.title}' is already in the library.")
+        self.save_books()
 
     def search_books(self, keyword):
         return []
@@ -47,3 +60,4 @@ manager.add_book("arian", "arian", "1995")
 manager.add_book("amir", "arian", "1995")
 manager.add_book("azar", "arian", "1995")
 print(manager.delete_book("amir"))
+manager.borrow_book("azar")
