@@ -22,7 +22,8 @@ class LibraryManager:
         self.save_books()
 
     def delete_book(self, title):
-
+        self.books = [book for book in self.books if book.title != title]
+        self.save_books()
 
     def borrow_book(self, title):
         return []
@@ -35,11 +36,14 @@ class LibraryManager:
 
     def save_books(self):
         with open(self.books_file, 'w') as f:
-            return json.dump([book.__dict__ for book in self.books], f)
+            return json.dump([book.__dict__ for book in self.books], f, indent=4)
 
 
     def load_book(self, books_file):
         return []
 
 manager = LibraryManager('books.json')
-manager.add_book("arian", "arian", 1995)
+manager.add_book("arian", "arian", "1995")
+manager.add_book("amir", "arian", "1995")
+manager.add_book("azar", "arian", "1995")
+print(manager.delete_book("amir"))
