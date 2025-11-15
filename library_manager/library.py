@@ -53,7 +53,11 @@ class LibraryManager:
 
 
     def load_book(self, books_file):
-        return []
+        try:
+            with open(books_file, 'r') as f:
+                return [Book(**book) for book in json.load(f)]
+        except (json.JSONDecodeError, FileNotFoundError):
+            return []
 
 manager = LibraryManager('books.json')
 manager.add_book("arian", "arian", "1995")
