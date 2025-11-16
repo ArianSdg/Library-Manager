@@ -1,6 +1,5 @@
 import json
 from models.book import Book
-from typing import List
 
 
 class Storage:
