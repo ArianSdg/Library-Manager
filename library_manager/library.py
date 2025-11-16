@@ -19,6 +19,9 @@ class LibraryManager:
 
     def add_book(self, title, author, year):
         book = Book(title, author, year)
+        for b in self.books:
+            if b.title.lower() == title:
+                return "Cant duplicate the book info!"
         self.books.append(book)
         self.save_books()
 
@@ -45,12 +48,15 @@ class LibraryManager:
         self.save_books()
 
     def search_books(self, keyword):
-        return []
+        result = []
+        for book in self.books:
+            if keyword.lower() in book.title.lower() or keyword.lower() in book.author.lower():
+                result.append(book)
+        return result
 
     def save_books(self):
         with open(self.books_file, 'w') as f:
             return json.dump([book.__dict__ for book in self.books], f, indent=4)
-
 
     def load_book(self, books_file):
         try:
