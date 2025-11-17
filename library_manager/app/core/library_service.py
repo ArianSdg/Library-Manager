@@ -8,6 +8,18 @@ class LibraryManager:
         self.books: List[Book] = storage.load_book()
 
     def add_book(self, title, author, year):
+        # Validate title
+        if not isinstance(title, str) or title.strip == "":
+            return "Invalid input for title."
+
+        # Validate author
+        if not isinstance(author, str) or author.strip() == "":
+            return "Invalid input for author."
+
+        # Validate year
+        if 1000 < year < 2025:
+            return "Invalid input for year."
+
         # Not adding books that already exist
         for b in self.books:
             if b.title.lower() == title.lower() and b.author.lower() == author.lower() and b.year == year:
@@ -16,6 +28,8 @@ class LibraryManager:
         book = Book(title, author, year)
         self.books.append(book)
         self.storage.save_books(self.books)
+
+        return f"Book '{title}' added successfully."
 
     def delete_book(self, title):
         self.books = [book for book in self.books if book.title.lower() != title.lower()]
@@ -44,10 +58,16 @@ class LibraryManager:
                 result.append(book)
         return result
 
-    def list_books(self):
-        result = ""
-        i = 1
-        for book in self.books:
-            result += f"{i}. {book.__str__()}\n"
-            i += 1
-        return result
+    def list_books(self, sort_by="title"):
+        if sort_by.lower() == "title" or sort_by == "1":
+            books = sorted(self.books, key=lambda b: b.title.lower())
+        elif sort_by.lower() == "author" or sort_by == "2":
+            books = sorted(self.books, key=lambda b: b.author.lower())
+        elif sort_by.lower() == "year" or sort_by == "3":
+            books = sorted(self.books, key=lambda b: b.year)
+        elif sort_by.lower() == "borrowed status" or sort_by == "4":
+            books = sorted(self.books, key=lambda b: b.is_borrowed)
+        else:
+            books = self.books
+
+        return books
