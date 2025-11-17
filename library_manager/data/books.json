@@ -3,7 +3,7 @@
         "title": "python",
         "author": "Ari",
         "year": "1800",
-        "is_borrowed": false
+        "is_borrowed": true
     },
     {
         "title": "java",
@@ -21,6 +21,12 @@
         "title": "pycharm",
         "author": "Ali",
         "year": "2000",
+        "is_borrowed": false
+    },
+    {
+        "title": "C++",
+        "author": "Marry",
+        "year": 1500,
         "is_borrowed": false
     }
 ]
