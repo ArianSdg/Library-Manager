@@ -43,3 +43,8 @@ class LibraryManager:
             if keyword.lower() in book.title.lower() or keyword.lower() in book.author.lower():
                 result.append(book)
         return result
+
+    def list_books(self):
+        for book in self.books:
+            i = 1
+            return f"{i}. {book.__str__()}"
