@@ -26,16 +26,16 @@ class LibraryManager:
             if title.lower() == book.title.lower() and not book.is_borrowed:
                 book.is_borrowed = True
                 self.storage.save_books(self.books)
-                return True
-        return False
+                return f"Book '{title}' borrowed."
+        return f"{title} is already borrowed."
 
     def return_book(self, title):
         for book in self.books:
             if title.lower() == book.title.lower() and book.is_borrowed:
                 book.is_borrowed = False
                 self.storage.save_books(self.books)
-                return True
-        return False
+                return f"Book '{title}' returned."
+        return f"{title} is already returned."
 
     def search_books(self, keyword):
         result = []
@@ -45,6 +45,9 @@ class LibraryManager:
         return result
 
     def list_books(self):
+        result = ""
+        i = 1
         for book in self.books:
-            i = 1
-            print(f"{i}. {book.__str__()}")
+            result += f"{i}. {book.__str__()}\n"
+            i += 1
+        return result
