@@ -1,5 +1,5 @@
 import json
-from models.book import Book
+from app.models.book import Book
 
 
 class Storage:

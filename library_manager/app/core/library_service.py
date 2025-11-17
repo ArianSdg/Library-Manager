@@ -1,5 +1,5 @@
 from typing import List
-from models.book import Book
+from app.models.book import Book
 
 
 class LibraryManager:
