@@ -20,6 +20,22 @@ class CLI:
                 author = input("Author: ")
                 year = input("Year: ")
                 self.manager.add_book(title, author, year)
+            elif option == 2:
+                title = input("Title: ")
+                self.manager.delete_book(title)
+            elif option == 3:
+                title = input("Title: ")
+                self.manager.borrow_book(title)
+            elif option == 4:
+                title = input("Title: ")
+                self.manager.return_book(title)
+            elif option == 5:
+                search_input = input("Search the title or the author: ")
+                self.manager.search_books(search_input)
             elif option == 6:
                 books_list = self.manager.list_books()
                 print(books_list)
+            elif option == 0:
+                break
+            else:
+                print("Invalid input!")
