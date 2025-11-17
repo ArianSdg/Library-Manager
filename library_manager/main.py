@@ -1,6 +1,6 @@
 from app.ui.cli import CLI
 from app.core.library_service import LibraryManager
-from app.storage.json_storage import Storage
+from app.storage.file_storage import Storage
 
 storage = Storage('data/books.json')
 manager = LibraryManager(storage)
