@@ -1,5 +1,6 @@
 from typing import List
 from app.models.book import Book
+from app.core.logger import log_activity
 
 
 class LibraryManager:
@@ -23,24 +24,39 @@ class LibraryManager:
         # Not adding books that already exist
         for b in self.books:
             if b.title.lower() == title.lower() and b.author.lower() == author.lower() and b.year == year:
+                log_activity("ADD", b, "Failed - Duplicate")
                 return "Can't duplicate the book info!"
 
         book = Book(title, author, year)
         self.books.append(book)
         self.storage.save_books(self.books)
+        log_activity("ADD", book, "Success")
 
         return f"Book '{title}' added successfully."
 
     def delete_book(self, title):
-        self.books = [book for book in self.books if book.title.lower() != title.lower()]
+        found = False
+        for book in self.books[:]:
+            if title.lower() == book.title.lower():
+                self.books.remove(book)
+                log_activity("REMOVE", book, "Success")
+                found = True
+
         self.storage.save_books(self.books)
+
+        if not found:
+            log_activity("REMOVE", None, f"Book {title} not found")
+            return f"Book {title} not found"
+        return f"Book '{title}' removed successfully."
 
     def borrow_book(self, title):
         for book in self.books:
             if title.lower() == book.title.lower() and not book.is_borrowed:
                 book.is_borrowed = True
                 self.storage.save_books(self.books)
+                log_activity("BORROW", book, "Success")
                 return f"Book '{title}' borrowed."
+        log_activity("BORROW", None, f"Book {title} not found or already borrowed")
         return f"{title} not found."
 
     def return_book(self, title):
@@ -48,7 +64,9 @@ class LibraryManager:
             if title.lower() == book.title.lower() and book.is_borrowed:
                 book.is_borrowed = False
                 self.storage.save_books(self.books)
+                log_activity("RETURN", book, "Success")
                 return f"Book '{title}' returned."
+        log_activity("BORROW", None, f"Book {title} not found or already available")
         return f"{title} not found."
 
     def search_books(self, keyword, borrowed=None):
