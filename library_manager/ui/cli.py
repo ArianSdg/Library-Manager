@@ -13,29 +13,34 @@ class CLI:
             print("6. List the books.")
             print("0. Exit")
 
-            option = int(input())
+            option = input()
 
-            if option == 1:
+            if option == "1":
                 title = input("Title: ")
                 author = input("Author: ")
                 year = input("Year: ")
                 self.manager.add_book(title, author, year)
-            elif option == 2:
+            elif option == "2":
                 title = input("Title: ")
                 self.manager.delete_book(title)
-            elif option == 3:
+            elif option == "3":
                 title = input("Title: ")
-                self.manager.borrow_book(title)
-            elif option == 4:
+                print(self.manager.borrow_book(title))
+            elif option == "4":
                 title = input("Title: ")
-                self.manager.return_book(title)
-            elif option == 5:
+                print(self.manager.return_book(title))
+            elif option == "5":
                 search_input = input("Search the title or the author: ")
-                self.manager.search_books(search_input)
-            elif option == 6:
+                searched_books = self.manager.search_books(search_input)
+
+                i = 1
+                for s in searched_books:
+                    print(f"{i}. {s.__str__()}")
+                    i += 1
+            elif option == "6":
                 books_list = self.manager.list_books()
                 print(books_list)
-            elif option == 0:
+            elif option == "0":
                 break
             else:
                 print("Invalid input!")
