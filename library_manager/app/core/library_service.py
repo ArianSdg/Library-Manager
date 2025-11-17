@@ -18,7 +18,7 @@ class LibraryManager:
             return "Invalid input for author."
 
         # Validate year
-        if 1000 < year < 2025:
+        if 1000 > year > 2025:
             return "Invalid input for year."
 
         # Not adding books that already exist
@@ -46,7 +46,7 @@ class LibraryManager:
 
         if not found:
             log_activity("REMOVE", None, f"Book {title} not found")
-            return f"Book {title} not found"
+            return f"Book '{title}' not found"
         return f"Book '{title}' removed successfully."
 
     def borrow_book(self, title):
