@@ -51,10 +51,15 @@ class LibraryManager:
                 return f"Book '{title}' returned."
         return f"{title} not found."
 
-    def search_books(self, keyword):
+    def search_books(self, keyword, borrowed=None):
         result = []
         for book in self.books:
-            if keyword.lower() in book.title.lower() or keyword.lower() in book.author.lower():
+            if (
+                (keyword.lower() in book.title.lower() or keyword.lower() in book.author.lower())
+                and (borrowed == book.is_borrowed or borrowed is None)
+            ):
+                result.append(book)
+            elif keyword.isdigit() and int(keyword)  == book.year and (borrowed is None or borrowed == book.is_borrowed):
                 result.append(book)
         return result
 
