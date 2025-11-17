@@ -7,6 +7,24 @@ def format_book_line(i, book):
     status_text = "Available" if not book.is_borrowed else "Borrowed"
     return f"{i}.{book.title} | {book.author} | {book.year} | {status_color}{status_text}{RESET}"
 
+def format_list_results(books):
+    result = ""
+    for i, book in enumerate(books, 1):
+        status_color = GREEN if not book.is_borrowed else RED
+        status_text = "Available" if not book.is_borrowed else "Borrowed"
+        result += f"{i}. {book.title} | {book.author} | {book.year} | {status_color}{status_text}{RESET}\n"
+    return result
+
+def sort_search_results(sort_option, searched_books):
+    if sort_option == "1":
+        return sorted(searched_books, key=lambda b: b.title.lower())
+    elif sort_option == "2":
+        return sorted(searched_books, key=lambda b: b.author.lower())
+    elif sort_option == "3":
+        return sorted(searched_books, key=lambda b: b.year)
+    elif sort_option == "4":
+        return sorted(searched_books, key=lambda b: b.is_borrowed)
+
 class CLI:
     def __init__(self, manager):
         self.manager = manager
@@ -52,20 +70,17 @@ class CLI:
                 search_input = input("Search the title or the author: ")
                 searched_books = self.manager.search_books(search_input)
 
-                i = 1
-                for s in searched_books:
-                    print(f"{i}. {s.__str__()}")
-                    i += 1
+                sort_option = input("Sort by: 1.Title 2.Author 3.Year 4.Borrowed\n")
+                final_result = sort_search_results(sort_option, searched_books)
+
+                print(format_list_results(final_result))
 
             elif option == "6":
                 print("How do you want to sort the list?")
-                status = input("1.Title\n2.Author\n3.Year\n4.Borrowed status\n")
+                sort_option = input("1.Title\n2.Author\n3.Year\n4.Borrowed status\n")
 
-                sorted_result = self.manager.list_books(status)
-                final_result = ""
-
-                for i, book in enumerate(sorted_result, 1):
-                    final_result += format_book_line(i, book) + "\n"
+                sorted_result = self.manager.list_books(sort_option)
+                print(format_list_results(sorted_result))
 
             elif option == "0":
                 break
