@@ -56,7 +56,7 @@ class CLI:
 
             elif option == "2":
                 title = input("Title: ")
-                self.manager.delete_book(title)
+                print(self.manager.delete_book(title))
 
             elif option == "3":
                 title = input("Title: ")
