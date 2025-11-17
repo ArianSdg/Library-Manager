@@ -3,11 +3,10 @@ from dataclasses import dataclass
 
 @dataclass
 class Book:
-    def __init__(self, title: str, author: str, year: int, is_borrowed=False):
-        self.title = title
-        self.author = author
-        self.year = year
-        self.is_borrowed = is_borrowed
+    title: str
+    author: str
+    year: int
+    is_borrowed: bool = False
 
     def to_dict(self):
         return {"title": self.title,
