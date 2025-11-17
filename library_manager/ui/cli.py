@@ -20,3 +20,6 @@ class CLI:
                 author = input("Author: ")
                 year = input("Year: ")
                 self.manager.add_book(title, author, year)
+            elif option == 6:
+                books_list = self.manager.list_books()
+                print(books_list)
