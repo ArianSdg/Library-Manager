@@ -10,8 +10,8 @@ class LibraryManager:
     def add_book(self, title, author, year):
         # Not adding books that already exist
         for b in self.books:
-            if b.title.lower() == title:
-                return "Cant duplicate the book info!"
+            if b.title.lower() == title.lower():
+                return "Can't duplicate the book info!"
 
         book = Book(title, author, year)
         self.books.append(book)
