@@ -8,7 +8,7 @@ class Storage:
 
     def save_books(self, books):
         with open(self.books_file, 'w') as f:
-            return json.dump([book.__dict__ for book in books], f, indent=4)
+            return json.dump([book.to_dict() for book in books], f, indent=4)
 
     def load_book(self):
         try:
