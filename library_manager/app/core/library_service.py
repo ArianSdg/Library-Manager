@@ -30,6 +30,7 @@ class LibraryManager:
         book = Book(title, author, year)
         self.books.append(book)
         self.storage.save_books(self.books)
+        self.storage.export_books_csv(self.books)
         log_activity("ADD", book, "Success")
 
         return f"Book '{title}' added successfully."
@@ -43,6 +44,7 @@ class LibraryManager:
                 found = True
 
         self.storage.save_books(self.books)
+        self.storage.export_books_csv(self.books)
 
         if not found:
             log_activity("REMOVE", None, f"Book {title} not found")
@@ -54,6 +56,7 @@ class LibraryManager:
             if title.lower() == book.title.lower() and not book.is_borrowed:
                 book.is_borrowed = True
                 self.storage.save_books(self.books)
+                self.storage.export_books_csv(self.books)
                 log_activity("BORROW", book, "Success")
                 return f"Book '{title}' borrowed."
         log_activity("BORROW", None, f"Book {title} not found or already borrowed")
@@ -64,6 +67,7 @@ class LibraryManager:
             if title.lower() == book.title.lower() and book.is_borrowed:
                 book.is_borrowed = False
                 self.storage.save_books(self.books)
+                self.storage.export_books_csv(self.books)
                 log_activity("RETURN", book, "Success")
                 return f"Book '{title}' returned."
         log_activity("BORROW", None, f"Book {title} not found or already available")
