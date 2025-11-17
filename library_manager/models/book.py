@@ -15,3 +15,6 @@ class Book:
                 "year": self.year,
                 "is_borrowed": self.is_borrowed,
                 }
+
+    def __str__(self):
+        return f"{self.title} | {self.author} | {self.year} | {self.is_borrowed}"
