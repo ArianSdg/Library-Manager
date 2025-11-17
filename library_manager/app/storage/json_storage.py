@@ -1,4 +1,5 @@
 import json
+import csv
 from app.models.book import Book
 
 
@@ -16,3 +17,10 @@ class Storage:
                 return [Book(**book) for book in json.load(f)]
         except (json.JSONDecodeError, FileNotFoundError):
             return []
+
+    def export_books_csv(self, books, file_path="data/books_export.csv"):
+        with open(file_path, "w", newline="") as f:
+            writer = csv.writer(f)
+            writer.writerow(["Title", "Author", "Year", "Borrowed"])
+            for book in books:
+                writer.writerow([book.title, book.author, book.year, book.is_borrowed])
