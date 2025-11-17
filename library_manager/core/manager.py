@@ -47,4 +47,4 @@ class LibraryManager:
     def list_books(self):
         for book in self.books:
             i = 1
-            return f"{i}. {book.__str__()}"
+            print(f"{i}. {book.__str__()}")
