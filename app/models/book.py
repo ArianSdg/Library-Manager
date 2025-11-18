@@ -3,9 +3,11 @@ from dataclasses import dataclass
 
 @dataclass
 class Book:
+    id: int
     title: str
     author: str
     year: int
+    count: int
     is_borrowed: bool = False
 
     def to_dict(self):
