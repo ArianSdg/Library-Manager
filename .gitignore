@@ -1,0 +1,7 @@
+# Default ignored files
+data/
+logs/
+*.json
+*.log
+venv/
+__pycache__/
