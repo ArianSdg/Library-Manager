@@ -73,15 +73,16 @@ class LibraryManager:
         log_activity("BORROW", None, f"Book {title} not found or already available")
         return f"{title} not found."
 
-    def search_books(self, keyword, borrowed=None):
+    def search_books(self, keyword, borrowed=False):
         result = []
         for book in self.books:
             if (
-                (keyword.lower() in book.title.lower() or keyword.lower() in book.author.lower())
-                and (borrowed == book.is_borrowed or borrowed is None)
+                (keyword.lower() in book.title.lower()
+                or keyword.lower() in book.author.lower())
+                and borrowed == book.is_borrowed
             ):
                 result.append(book)
-            elif keyword.isdigit() and int(keyword)  == book.year and (borrowed is None or borrowed == book.is_borrowed):
+            elif keyword.isdigit() and int(keyword) == book.year and borrowed == book.is_borrowed:
                 result.append(book)
         return result
 
