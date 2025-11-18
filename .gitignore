@@ -1,7 +1,46 @@
-# Default ignored files
-data/
-logs/
-*.json
-*.log
-venv/
+# ===== Python =====
 __pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+
+# Virtual environment
+venv/
+ENV/
+env/
+
+# ===== PyCharm / JetBrains =====
+.idea/
+*.iml
+
+# ===== OS garbage =====
+.DS_Store
+Thumbs.db
+
+# ===== Logs =====
+logs/
+*.log
+
+# ===== Data files (runtime only) =====
+data/
+!data/.gitkeep
+
+# ===== Export files =====
+*.csv
+*.json
+
+# ===== Backup files =====
+*_backup.json
+*.bak
+
+# ===== Cache =====
+.cache/
+.mypy_cache/
+pytest_cache/
+
+# ===== Others =====
+dist/
+build/
+
