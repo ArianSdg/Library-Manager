@@ -1,9 +1,0 @@
-# Default ignored files
-/shelf/
-/workspace.xml
-data/
-logs/
-*.json
-*.log
-venv/
-__pycache__/
