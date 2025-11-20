@@ -7,8 +7,9 @@ class LibraryManager:
     def __init__(self, storage):
         self.storage = storage
         self.books: List[Book] = storage.load_book()
+        self.next_id = 1
 
-    def add_book(self, title, author, year):
+    def add_book(self, title, author, year, count):
         # Validate title
         if not isinstance(title, str) or title.strip == "":
             return "Invalid input for title."
@@ -27,7 +28,7 @@ class LibraryManager:
                 log_activity("ADD", b, "Failed - Duplicate")
                 return "Can't duplicate the book info!"
 
-        book = Book(title, author, year)
+        book = Book(self.next_id, title, author, year, count)
         self.books.append(book)
         self.storage.save_books(self.books)
         self.storage.export_books_csv(self.books)
@@ -35,10 +36,10 @@ class LibraryManager:
 
         return f"Book '{title}' added successfully."
 
-    def delete_book(self, title):
+    def delete_book(self, id):
         found = False
         for book in self.books[:]:
-            if title.lower() == book.title.lower():
+            if id == book.id:
                 self.books.remove(book)
                 log_activity("REMOVE", book, "Success")
                 found = True
@@ -47,31 +48,33 @@ class LibraryManager:
         self.storage.export_books_csv(self.books)
 
         if not found:
-            log_activity("REMOVE", None, f"Book {title} not found")
-            return f"Book '{title}' not found"
-        return f"Book '{title}' removed successfully."
+            log_activity("REMOVE", None, f"Book with '{id}' ID not found")
+            return f"Book with '{id}' ID not found."
+        return f"Book with '{id}' ID removed successfully."
 
-    def borrow_book(self, title):
+    def borrow_book(self, id):
         for book in self.books:
-            if title.lower() == book.title.lower() and not book.is_borrowed:
+            if id == book.id and not book.is_borrowed:
                 book.is_borrowed = True
+                book.count -= 1
                 self.storage.save_books(self.books)
                 self.storage.export_books_csv(self.books)
                 log_activity("BORROW", book, "Success")
-                return f"Book '{title}' borrowed."
-        log_activity("BORROW", None, f"Book {title} not found or already borrowed")
-        return f"{title} not found."
+                return f"Book with '{id}' ID borrowed."
+        log_activity("BORROW", None, f"Book with '{id}' ID not found or already borrowed")
+        return f"Book with '{id}' ID not found."
 
-    def return_book(self, title):
+    def return_book(self, id):
         for book in self.books:
-            if title.lower() == book.title.lower() and book.is_borrowed:
+            if id == book.id and book.is_borrowed:
                 book.is_borrowed = False
+                book.count += 1
                 self.storage.save_books(self.books)
                 self.storage.export_books_csv(self.books)
                 log_activity("RETURN", book, "Success")
-                return f"Book '{title}' returned."
-        log_activity("BORROW", None, f"Book {title} not found or already available")
-        return f"{title} not found."
+                return f"Book with '{id}' ID returned."
+        log_activity("BORROW", None, f"Book with '{id}' ID not found or already available")
+        return f"Book with '{id}' ID not found."
 
     def search_books(self, keyword, borrowed=False):
         result = []
@@ -86,7 +89,7 @@ class LibraryManager:
                 result.append(book)
         return result
 
-    def list_books(self, sort_by="title"):
+    def list_books(self, sort_by="id"):
         if sort_by.lower() == "title" or sort_by == "1":
             books = sorted(self.books, key=lambda b: b.title.lower())
         elif sort_by.lower() == "author" or sort_by == "2":
