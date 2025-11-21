@@ -7,7 +7,11 @@ class Book:
     title: str
     author: str
     year: int
-    count: int
+    count: int = 1
+    borrowed: int = 0
+
+    def available(self):
+        return self.borrowed - self.count
 
     def to_dict(self):
         return {"id": self.id,
