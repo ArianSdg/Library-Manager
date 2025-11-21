@@ -11,7 +11,7 @@ class Book:
     borrowed: int = 0
 
     def available(self):
-        return self.borrowed - self.count
+        return self.count - self.borrowed
 
     def to_dict(self):
         return {"id": self.id,
