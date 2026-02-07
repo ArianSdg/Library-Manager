@@ -11,7 +11,7 @@ class LibraryManager:
 
     def add_book(self, title, author, year, count):
         # Validate title
-        if not isinstance(title, str) or title.strip == "":
+        if not isinstance(title, str) or not title.strip == "":
             return "Invalid input for title."
 
         # Validate author
@@ -94,7 +94,7 @@ class LibraryManager:
                 and borrowed == book.borrowed
             ):
                 result.append(book)
-            elif keyword.isdigit() and int(keyword) == book.year and borrowed == book.is_borrowed:
+            elif keyword.isdigit() and int(keyword) == book.year and borrowed == book.borrowed:
                 result.append(book)
         return result
 
