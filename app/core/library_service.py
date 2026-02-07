@@ -7,7 +7,7 @@ class LibraryManager:
     def __init__(self, storage):
         self.storage = storage
         self.books: List[Book] = storage.load_book()
-        self.next_id = 1
+        self.next_id = max([b.id for b in self.books], default=0) + 1
 
     def add_book(self, title, author, year, count):
         # Validate title
@@ -19,7 +19,7 @@ class LibraryManager:
             return "Invalid input for author."
 
         # Validate year
-        if 1000 > year > 2025:
+        if not (1000 <= year <= 2025):
             return "Invalid input for year."
 
         # Not adding books that already exist
@@ -29,6 +29,7 @@ class LibraryManager:
                 return "Can't duplicate the book info!"
 
         book = Book(self.next_id, title, author, year, count)
+
         self.books.append(book)
         self.storage.save_books(self.books)
         self.storage.export_books_csv(self.books)
@@ -54,35 +55,43 @@ class LibraryManager:
 
     def borrow_book(self, id):
         for book in self.books:
-            if id == book.id and not book.is_borrowed:
-                book.is_borrowed = True
-                book.count -= 1
-                self.storage.save_books(self.books)
-                self.storage.export_books_csv(self.books)
-                log_activity("BORROW", book, "Success")
-                return f"Book with '{id}' ID borrowed."
-        log_activity("BORROW", None, f"Book with '{id}' ID not found or already borrowed")
+            if id == book.id:
+                if book.available() > 0:
+                    book.borrowed += 1
+                    self.storage.save_books(self.books)
+                    self.storage.export_books_csv(self.books)
+                    log_activity("BORROW", book, "Success")
+                    return f"Book with '{id}' ID borrowed."
+                else:
+                    log_activity("BORROW", book, f"Failed - No copies found.")
+                    return "No copies found"
+
+        log_activity("BORROW", None, f"Book with '{id}' ID not found.")
         return f"Book with '{id}' ID not found."
 
     def return_book(self, id):
         for book in self.books:
-            if id == book.id and book.is_borrowed:
-                book.is_borrowed = False
-                book.count += 1
-                self.storage.save_books(self.books)
-                self.storage.export_books_csv(self.books)
-                log_activity("RETURN", book, "Success")
-                return f"Book with '{id}' ID returned."
-        log_activity("BORROW", None, f"Book with '{id}' ID not found or already available")
+            if id == book.id:
+                if book.borrowed > 0:
+                    book.borrowed -= 1
+                    self.storage.save_books(self.books)
+                    self.storage.export_books_csv(self.books)
+                    log_activity("RETURN", book, "Success")
+                    return f"Book with '{id}' ID returned."
+                else:
+                    log_activity("RETURN", book, f"Book with {id} ID is not Borrowed.")
+                    return f"Book is not Borrowed."
+
+        log_activity("BORROW", None, f"Book with '{id}' ID not found.")
         return f"Book with '{id}' ID not found."
 
-    def search_books(self, keyword, borrowed=False):
+    def search_books(self, keyword, borrowed=0):
         result = []
         for book in self.books:
             if (
                 (keyword.lower() in book.title.lower()
                 or keyword.lower() in book.author.lower())
-                and borrowed == book.is_borrowed
+                and borrowed == book.borrowed
             ):
                 result.append(book)
             elif keyword.isdigit() and int(keyword) == book.year and borrowed == book.is_borrowed:
@@ -98,7 +107,7 @@ class LibraryManager:
             books = sorted(self.books, key=lambda b: b.year)
         elif sort_by.lower() == "borrowed status" or sort_by == "4":
             books = sorted(self.books, key=lambda b: b.is_borrowed)
-        else:
-            books = self.books
+        elif sort_by.lower() == "id" or sort_by == "0":
+            books = sorted(self.books, key=lambda b: b.id)
 
         return books
