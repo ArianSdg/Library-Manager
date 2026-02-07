@@ -31,6 +31,13 @@ class Storage:
 
         with open(file_path, "w", newline="") as f:
             writer = csv.writer(f)
-            writer.writerow(["Title", "Author", "Year", "Borrowed"])
+            writer.writerow(["ID", "Title", "Author", "Year", "Count", "Borrowed"])
             for book in books:
-                writer.writerow([book.title, book.author, book.year, book.is_borrowed])
+                writer.writerow([
+                    book.id,
+                    book.title,
+                    book.author,
+                    book.year,
+                    book.count,
+                    book.borrowed
+                ])
