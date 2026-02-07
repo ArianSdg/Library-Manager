@@ -85,16 +85,14 @@ class LibraryManager:
         log_activity("BORROW", None, f"Book with '{id}' ID not found.")
         return f"Book with '{id}' ID not found."
 
-    def search_books(self, keyword, borrowed=0):
+    def search_books(self, keyword):
         result = []
         for book in self.books:
             if (
                 (keyword.lower() in book.title.lower()
-                or keyword.lower() in book.author.lower())
-                and borrowed == book.borrowed
+                or keyword.lower() in book.author.lower()
+                or keyword.isdigit() and int(keyword) == book.year)
             ):
-                result.append(book)
-            elif keyword.isdigit() and int(keyword) == book.year and borrowed == book.borrowed:
                 result.append(book)
         return result
 
