@@ -55,16 +55,16 @@ class CLI:
                 print(result)
 
             elif option == "2":
-                title = input("Title: ")
-                print(self.manager.delete_book(title))
+                book_id = int(input("Book id: "))
+                print(self.manager.delete_book(book_id))
 
             elif option == "3":
-                title = input("Title: ")
-                print(self.manager.borrow_book(title))
+                book_id = int(input("Book id: "))
+                print(self.manager.borrow_book(book_id))
 
             elif option == "4":
-                title = input("Title: ")
-                print(self.manager.return_book(title))
+                book_id = int(input("Book id: "))
+                print(self.manager.return_book(book_id))
 
             elif option == "5":
                 search_input = input("Search the title or the author: ")
